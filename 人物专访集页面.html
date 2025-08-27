@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物专访 - 且听烽吟实践小队</title>
+    <style>
+        /* --- 全局样式 (与母页面完全一致) --- */
+        :root {
+            --primary-color: #8B4513; /* 马鞍棕色 */
+            --primary-color-darker: #6F360F;
+            --secondary-color: #D2B48C; /* 谭色 */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --font-family: 'SimSun', 'FangSong', 'KaiTi', serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: normal;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        /* --- 导航栏 (与母页面完全一致) --- */
+        #navbar {
+            background: #fff;
+            color: var(--dark-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #navbar .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        #navbar .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        #navbar .logo-text {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        #navbar ul li a {
+            color: var(--dark-color);
+            padding: 15px 20px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #navbar ul li a:hover {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* --- 页脚 (与母页面完全一致) --- */
+        #main-footer {
+            background: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- 人物专访页面专属样式 --- */
+        #interviews-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)), url('人物专访.png') no-repeat center center/cover;
+            color: #fff;
+            padding: 200px 0;
+            text-align: center;
+        }
+
+        #interviews-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #interviews-header p {
+            font-size: 1.5rem;
+            font-family: 'KaiTi', serif;
+        }
+
+        .interview-entry {
+            background: #fff;
+            margin-bottom: 50px;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            display: flex;
+            flex-wrap: wrap; /* 允许换行 */
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .interview-meta {
+            flex: 0 0 250px; /* 固定宽度，不伸缩 */
+            text-align: center;
+        }
+
+        .interview-meta img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .interview-meta h3 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 0 0 10px 0;
+            display: block; /* 确保占据整行 */
+        }
+
+        .interview-meta .identity {
+            font-size: 1.0rem;
+            color: #666;
+            font-style: italic;
+            display: block; /* 确保占据整行 */
+            margin-bottom: 20px;
+        }
+
+        .interview-content {
+            flex: 1; /* 占据剩余空间 */
+            min-width: 300px; /* 保证内容区域最小宽度 */
+        }
+
+        .interview-quote {
+            font-size: 1.4rem;
+            font-family: 'KaiTi', serif;
+            color: var(--primary-color-darker);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 20px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .interview-qa {
+            margin-top: 20px;
+        }
+
+        .interview-qa .question {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .interview-qa .answer {
+            color: #333;
+            text-indent: 2em; /* 段首缩进 */
+            padding-bottom: 15px;
+        }
+
+        .read-more-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .read-more-btn:hover {
+            background-color: var(--primary-color-darker);
+        }
+        
+        /* --- 响应式设计 --- */
+        @media (max-width: 768px) {
+            #navbar .container {
+                flex-direction: column;
+            }
+            #navbar ul {
+                padding-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            #interviews-header h1 {
+                font-size: 2.5rem;
+            }
+            #interviews-header p {
+                font-size: 1.2rem;
+            }
+            .interview-entry {
+                flex-direction: column;
+                align-items: center;
+                padding: 30px 20px;
+            }
+            .interview-meta {
+                flex: 1; /* 恢复弹性 */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container">
+            <a href="网页文件.html" class="logo-link"> <img src="队徽.jpg" alt="且听烽吟队徽" class="logo-img">
+                <span class="logo-text">且听烽吟实践团</span>
+            </a>
+            <ul>
+                <li><a href="网页文件.html#showcase">首页</a></li>
+                <li><a href="网页文件.html#about">关于我们</a></li>
+                <li><a href="网页文件.html#schedule">实践日程</a></li>
+                <li><a href="网页文件.html#team">队员风采</a></li>
+                <li><a href="网页文件.html#portfolio">成果展示</a></li>
+                <li><a href="网页文件.html#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="interviews-header">
+        <div class="container">
+            <h1>人物专访</h1>
+            <p>"聆听时代回响，记录亲历者的口述历史"</p>
+        </div>
+    </header>
+
+    <section id="interviews-list">
+        <div class="container">
+            <h2>访谈实录</h2>
+
+            <div class="interview-entry">
+                <div class="interview-meta">
+                    <img src="蒋玉琨先生.png" alt="蒋玉琨先生">
+                    <h3>蒋玉琨</h3>
+                    <p class="identity">原北京钢铁学院总务长王慕林之子</p>
+                </div>
+                <div class="interview-content">
+                    <p class="interview-quote">“父辈们的精神就像一盏灯，不仅照亮了他们自己的路，也一直指引着我们前行。”</p>
+                    <div class="interview-qa">
+                        <p class="question">Q: 父亲的革命生涯中，既有担任区长、县长，在根据地坚持游击斗争的军事经历，也有在后方被服厂、财政粮食科负责后勤供给的管理经验。他如何看待这两种截然不同的角色？从“枪杆子”到“钱袋子”的转变中，他面临过哪些挑战？</p>
+                        <p class="answer">我们家以前住在钢院（现在体育馆那块地儿）的教师宿舍楼，一共6栋楼，院长、副院长，还有我们家，剩下住的全是教授。那些教授都是有学问的人，我们家在那儿住着，就显得特别 “另类” 。我父亲是个土八路，没什么文化，但是跟着共产党走的信念特别坚定，连ABCD这些外国字母都不认得。我学外语的时候，他一句也听不懂。在钢院里，我父亲当总务长，除了教学不管，剩下的都管，像检查卫生、管医务室、管小学校这些。在我们学生、老师眼里，他就是个 “土八路” ，我们搞教学、当学生的，不太想掺和他那些后勤事儿。他不像咱概念里的李云龙会打仗，也不是政委，就是干些杂七杂八的活儿，可他干得挺开心。他还得代表党关心教授生活，有回看暖气热不热，跟个教授吵起来了。教授屋里开着热暖气还开窗，父亲觉得浪费，教授却坚持开窗，俩人各说各的理。他看见浪费钢铁的事儿也会直言，说那堆钢像 “豆腐渣” ，后来还因为这被说 “反对三面红旗” ，但他就是这么直来直去。</p>
+                        <p class="question">Q: 您认为您父亲留给子孙后代，乃至留给这个时代最重要的精神遗产是什么？他的哪些品质或话语，至今仍然在深刻地影响着您的人生?</p>
+                        <p class="answer">第一，就是要相信党，要有信念。第二个，不管什么情况下要克服问他这个韧劲儿真的是终身受益的一个好事。所以我就跟你们说，年轻人应该和向量一样，既要有方向又要有力量，始终坚持向老一辈学习。</p>
+                    </div>
+                    <a href="https://mp.weixin.qq.com/s/vJbcfpKXLvjDrjCNrvsOpw" class="read-more-btn">阅读完整专访</a>
+                </div>
+            </div>
+
+            <div class="interview-entry">
+                <div class="interview-meta">
+                    <img src="张洪成先生.png" alt="张洪成先生">
+                    <h3>张洪成</h3>
+                    <p class="identity">原北京钢铁学院纪委书记林楠之子</p>
+                </div>
+                <div class="interview-content">
+                    <p class="interview-quote">“历史不仅在书本里，更活在每一个家庭的传承中。我们有责任把这些故事讲下去。”</p>
+                    <div class="interview-qa">
+                        <p class="question">Q: 在延安的学习生活，对您母亲一生的这种作风形成了怎样的塑造呢？或者在您的家庭的这种氛围中，有没有感受到这种延续？</p>
+                        <p class="answer">1945年4 月，党中央在延安召开了具有重要历史意义的第七次全国党代表大会，在大会前总结了建党后二十四年来党的路线、方针、政策，做出了《若干历史问题的决议》，进一步确立了以毛泽东同志为代表的党的正确路线。为了统一认识，党校也按地区组织了讨论。大家对革命的前途进一步增强了胜利的信心，同时也对今后前进中的曲折和困难做了充分的思想准备。
+  我母亲的5个子女分别毕业于北大、吉林大学等著名学府，有的长期从事清史研究、地球物理研究；有的在报社、出版社工作，在各自的领域均有所建树。我们都认为我们取得的成绩和我母亲影响分不开。</p>
+                        <p class="question">Q: 您认为有什么精神是我们应该从老一辈那里学习，然后继承并发扬光大的呢？</p>
+                        <p class="answer">我母亲一直坚信只有社会主义才能救中国，在工作中特别地坚持原则，遇到困难和打击也决不低头。这些应该我们学习和继承的。</p>
+                    </div>
+                    <a href="https://mp.weixin.qq.com/s/d66jUCemFgC2hnYCt2CmJg" class="read-more-btn">阅读完整专访</a>
+                </div>
+            </div>
+            
+            <div class="interview-entry">
+                <div class="interview-meta">
+                    <img src="孙铁.jpg" alt="孙铁教授">
+                    <h3>孙铁</h3>
+                    <p class="identity">原铁道兵第十一师师长陈德三之婿</p>
+                </div>
+                <div class="interview-content">
+                    <p class="interview-quote">“铁道兵的精神，就是逢山开路，遇水架桥。这种精神源于抗战，也建设了新中国。”</p>
+                    <div class="interview-qa">
+                        <p class="question">Q: 纵观您岳父从苏区到抗战胜利的完整经历，您认为支撑他走过枪林弹雨，历经千难万险的精神核心是什么？他最希望传承后辈的是一种什么样的精神？</p>
+                        <p class="answer">他从红小鬼一直到最后的部队的高级指挥员，这个过程始终就贯彻了一个他的不忘初心。刚才咱们前面已经回顾了，最开始不忘初心，就是想让其他的地方的老百姓像根据地一样过上好日子，有民主，自己能做主。那么这个反“围剿”就是要打败这个国民党，保存我的这个革命武装力量。我要保存这个是抗日，当时还不是抗日的，党的革命根据地，这是他的初心。到了这个北上要长征，虽然经历了很多艰难困苦，但是他们的思想就是说我往北边走，我要跟那个日本鬼子去面对面的作战，我把他赶出中国去，我中国就独立自主建立我们的这个人民政权。到了日本投降的那个时候，实际上当时中国革命的这种势力，这种力量都比较强了。当时的思想就是我要打败这个国民党，建立人民的政权。但人民政权是什么样？这些因为他们毕竟都是大老粗，他们毕竟没有受过系统的教育。但是他们有个思想，也就是说将来不是国民党统治中国了，那么是我们共产党来管理中国，所以我们就要干得非常好。虽然不知道具体好到什么程度，但是这种思想，这种初心一直没变。</p>
+                        <p class="question">Q: 陈老这么多年的戎马生涯，对他后面解放以后的工作，在作风上面有什么影响？</p>
+                        <p class="answer">在部队里，我就是执行命令，中央怎么说我就怎么干，所以他们就是党指挥枪，这点就是坚持的非常严格，而且做的非常彻底。包括咱们后来，到最后，咱们改革开放以后，那个时候他们年龄已经很大了，那时候都六十多岁了，最后离休了。但是他们还非常关心国家的发展，支持改革开放，认为这个是中国发展的一个途径，所以到晚年他们还是一直每天坚持看那个参考消息，每天要看的新闻联播，定期到办公室去看看文件，听听报告，还有关心国家大事，尤其是关心的军队的建设，认为这个时候这个军队的初心是什么，就是党指挥枪，保卫好祖国。</p>
+                    </div>
+                    <a href="要链接的推送URL" class="read-more-btn">阅读完整专访</a>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+    <footer id="main-footer">
+        <p>Copyright &copy; 2025, 北京科技大学且听烽吟红色寻访实践团. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

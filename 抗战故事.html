@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抗战故事 - 且听烽吟实践小队</title>
+    <style>
+        /* --- 全局样式 (继承自母页面) --- */
+        :root {
+            --primary-color: #8B4513; /* 马鞍棕色 */
+            --primary-color-darker: #6F360F;
+            --secondary-color: #D2B48C; /* 谭色 */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --font-family: 'SimSun', 'FangSong', 'KaiTi', serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 900px; /* 调整内容宽度以适应阅读 */
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: normal;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        /* --- 导航栏 (与母页面完全一致) --- */
+        #navbar {
+            background: #fff;
+            color: var(--dark-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            max-width: 1100px; /* 导航栏容器宽度保持不变 */
+        }
+
+        #navbar .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        #navbar .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        #navbar .logo-text {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        #navbar ul li a {
+            color: var(--dark-color);
+            padding: 15px 20px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #navbar ul li a:hover {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* --- 页脚 (与母页面完全一致) --- */
+        #main-footer {
+            background: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /********************************************/
+        /* --- 新增：子页面专属样式 --- */
+        /********************************************/
+
+        /* --- 子页面通用页眉 --- */
+        .page-header {
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .page-header .subtitle {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        /* --- 故事内容区域 --- */
+        .story-content {
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            border-radius: 8px;
+        }
+
+        /* --- 单个故事条目 --- */
+        .story-entry {
+            margin-bottom: 60px;
+        }
+
+        .story-entry h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .story-meta {
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .story-meta span {
+            margin: 0 15px;
+        }
+
+        .story-entry p {
+            font-size: 1.1rem;
+            text-indent: 2em; /* 首行缩进 */
+            line-height: 2;   /* 增加行高，提升阅读体验 */
+            margin-bottom: 20px;
+        }
+
+        .story-entry figure {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .story-entry img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 5px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .story-entry figcaption {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* --- 故事之间的分隔线 --- */
+        .story-divider {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), var(--secondary-color), rgba(0, 0, 0, 0));
+            margin: 60px 0;
+        }
+
+        /* --- 故事卡片样式 --- */
+        .story-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .story-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: var(--dark-color);
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .story-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .story-card-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .story-card h3 {
+            color: var(--primary-color);
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .story-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 1024px) {
+            .story-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .story-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .story-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- 响应式设计 --- */
+        @media (max-width: 768px) {
+            #navbar .container {
+                flex-direction: column;
+            }
+            #navbar ul {
+                padding-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+            .story-content {
+                padding: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container">
+            <a href="网页文件.html" class="logo-link">
+                <img src="队徽.jpg" alt="且听烽吟队徽" class="logo-img">
+                <span class="logo-text">且听烽吟实践团</span>
+            </a>
+            <ul>
+                <li><a href="网页文件.html#showcase">首页</a></li>
+                <li><a href="网页文件.html#about">关于我们</a></li>
+                <li><a href="网页文件.html#schedule">实践日程</a></li>
+                <li><a href="网页文件.html#team">队员风采</a></li>
+                <li><a href="网页文件.html#portfolio">成果展示</a></li>
+                <li><a href="网页文件.html#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>抗战故事</h1>
+            <p class="subtitle">历史的回响，英雄的赞歌。我们记录，只为永不忘却。</p>
+        </div>
+    </header>
+
+    <section id="stories">
+        <div class="container">
+            <div class="story-cards">
+                <a href="https://mp.weixin.qq.com/s/bT4fbBWdD8Vd5nQbySN4zw" class="story-card">
+                    <img src="左权.jpg" alt="左权将军">
+                    <div class="story-card-content">
+                        <h3>左权</h3>
+                        <p>百战将军，为国捐躯</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/_qMAh0BvRcLzCU77jLBDaA" class="story-card">
+                    <img src="佟麟阁.jpg" alt="佟麟阁将军">
+                    <div class="story-card-content">
+                        <h3>佟麟阁</h3>
+                        <p>血染南苑，忠贯日月</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/C_cjQ43aYIcjbP4MAx6KHw" class="story-card">
+                    <img src="红嫂.webp" alt="沂蒙红嫂">
+                    <div class="story-card-content">
+                        <h3>沂蒙红嫂</h3>
+                        <p>母爱无疆，情暖军心</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/m_4l07VGpgEBl2PgijhKOw" class="story-card">
+                    <img src="杨靖宇.jpg" alt="杨靖宇将军">
+                    <div class="story-card-content">
+                        <h3>杨靖宇</h3>
+                        <p>雪地吞松，浩气长存</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/fj9cI6VGIptDY1lo19RlsA" class="story-card">
+                    <img src="马占山.jpg" alt="马占山将军">
+                    <div class="story-card-content">
+                        <h3>马占山</h3>
+                        <p>智诈御敌，奇谋抗日</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/maEA9BzF12HQ_WPvp3LOVQ" class="story-card">
+                    <img src="杨成武.png" alt="杨成武将军">
+                    <div class="story-card-content">
+                        <h3>杨成武</h3>
+                        <p>平型关上，战功赫赫</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/icQIPm9DFueVi__uu3klRw" class="story-card">
+                    <img src="贺炳炎.jpg" alt="贺炳炎">
+                    <div class="story-card-content">
+                        <h3>贺炳炎</h3>
+                        <p>血战湘江，殊死抗敌</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/kZ2KTcxaSY2MQcbc3qHcUw" class="story-card">
+                    <img src="任弼时.jpg" alt="任弼时">
+                    <div class="story-card-content">
+                        <h3>任弼时</h3>
+                        <p>运筹帷幄，智定千里</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/9PRPZb0SonEjsVYQc_Jp_Q" class="story-card">
+                    <img src="刘胡兰.jpg" alt="刘胡兰">
+                    <div class="story-card-content">
+                        <h3>刘胡兰</h3>
+                        <p>宁死不屈，巾帼英雄</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/fJXbf58tdXE1HX_NAhUKTA" class="story-card">
+                    <img src="赵一曼.jpg" alt="赵一曼">
+                    <div class="story-card-content">
+                        <h3>赵一曼</h3>
+                        <p>巾帼英雄，视死如归</p>
+                    </div>
+                </a>
+
+                <a href="https://mp.weixin.qq.com/s/3-kPVbpXBzSjzCsOW18cpQ" class="story-card">
+                    <img src="data:image/jpeg;base64,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" alt="彭士量">
+                    <div class="story-card-content">
+                        <h3>彭士量</h3>
+                        <p>浴血奋战，保家卫国</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer id="main-footer">
+        <p>Copyright &copy; 2025, 北京科技大学且听烽吟红色寻访实践团. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

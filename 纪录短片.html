@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纪录短片 - 且听烽吟实践小队</title>
+    <style>
+        /* --- 全局样式 (Global Styles) --- */
+        :root {
+            --primary-color: #8B4513; /* 马鞍棕色 (SaddleBrown) */
+            --primary-color-darker: #6F360F;
+            --secondary-color: #D2B48C; /* 谭色 (Tan) */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --font-family: 'SimSun', 'FangSong', 'KaiTi', serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            display: flex; /* 使用 Flexbox 布局 */
+            flex-direction: column; /* 垂直排列 */
+            min-height: 100vh; /* 最小高度为视窗高度 */
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        h1, h2 {
+            font-weight: normal;
+        }
+
+        section {
+            padding: 60px 0;
+            flex-grow: 1; /* 让 section 区域自动填充剩余空间 */
+        }
+
+        /* --- 导航栏 (Navbar) --- */
+        #navbar {
+            background: #fff;
+            color: var(--dark-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #navbar .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        #navbar .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        #navbar .logo-text {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        #navbar ul li a {
+            color: var(--dark-color);
+            padding: 15px 20px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #navbar ul li a:hover {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* --- 视频展示区 (Video Showcase) --- */
+        #video-showcase {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+
+        .video-player-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 宽高比 */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+
+        .video-player-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-description {
+            text-align: center;
+            margin-bottom: 50px; /* 增加与视频播放器之间的间距 */
+        }
+
+        .video-description h1 {
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color); /* 沿用主页标题样式 */
+            display: inline-block; /* 让下划线长度适应文字 */
+            padding-bottom: 10px;
+        }
+
+        .video-description p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 20px auto 0;
+        }
+
+        .video-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .play-button:hover {
+            background: rgba(139, 69, 19, 0.9);
+        }
+
+        .play-icon {
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 20px 0 20px 30px;
+            border-color: transparent transparent transparent #ffffff;
+            margin-left: 28px;
+        }
+        
+        /* --- 页脚 (Footer) --- */
+        #main-footer {
+            background: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- 响应式设计 (Responsive Design) --- */
+        @media (max-width: 768px) {
+            #navbar .container {
+                flex-direction: column;
+            }
+            #navbar ul {
+                padding-top: 10px;
+            }
+            .video-description h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container">
+            <a href="网页文件.html" class="logo-link"> <img src="队徽.jpg" alt="且听烽吟队徽" class="logo-img">
+                <span class="logo-text">且听烽吟实践团</span>
+            </a>
+            <ul>
+                <li><a href="网页文件.html#showcase">首页</a></li>
+                <li><a href="网页文件.html#about">关于我们</a></li>
+                <li><a href="网页文件.html#schedule">实践日程</a></li>
+                <li><a href="网页文件.html#team">队员风采</a></li>
+                <li><a href="网页文件.html#portfolio">成果展示</a></li>
+                <li><a href="网页文件.html#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="video-showcase">
+        <div class="container">
+            <div class="video-description">
+                <h1>《听风成诗 我辈续吟》</h1>
+                <p>本纪录短片由“且听烽吟”实践团倾力制作，旨在通过镜头重温那段峥嵘岁月，探寻先辈们不屈不挠的抗争精神。我们走访了多个历史遗迹，采访了英雄的后人，希望将那些感人至深的故事传递给更多的人，让红色血脉在新时代继续流淌。</p>
+            </div>
+            <div class="video-player-wrapper">
+                <video id="myVideo" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+                    <source src="微电影最终版.mp4" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频播放。
+                </video>
+                <div class="video-cover">
+                    <img src="微电影最终版-封面.jpg" alt="《烽烟不熄 精神永续》封面">
+                    <button class="play-button">
+                        <i class="play-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer id="main-footer">
+        <p>Copyright &copy; 2025, 北京科技大学且听烽吟红色寻访实践团. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelector('.play-button').addEventListener('click', function() {
+            const videoCover = document.querySelector('.video-cover');
+            const video = document.getElementById('myVideo');
+            
+            videoCover.style.display = 'none';
+            video.style.display = 'block';
+            video.play();
+        });
+    </script>
+
+</body>
+</html>
