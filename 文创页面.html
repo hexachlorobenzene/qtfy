@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文创产品 - 且听烽吟实践小队</title>
+    <style>
+        /* --- 全局样式 (与母页面完全一致) --- */
+        :root {
+            --primary-color: #8B4513; /* 马鞍棕色 */
+            --primary-color-darker: #6F360F;
+            --secondary-color: #D2B48C; /* 谭色 */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --font-family: 'SimSun', 'FangSong', 'KaiTi', serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+            
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: normal;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        /* --- 导航栏 (与母页面完全一致) --- */
+        #navbar {
+            background: #fff;
+            color: var(--dark-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #navbar .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        #navbar .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        #navbar .logo-text {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        #navbar ul li a {
+            color: var(--dark-color);
+            padding: 15px 20px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #navbar ul li a:hover {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* --- 页脚 (与母页面完全一致) --- */
+        #main-footer {
+            background: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- 文创产品页面专属样式 --- */
+        #products-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('4.jpg') no-repeat center center/cover;
+            color: #fff;
+            padding: 160px 0;
+            text-align: center;
+        }
+
+        #products-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        #products-header p {
+            font-size: 1.5rem;
+            font-family: 'KaiTi', serif;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .product-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-content h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .product-content p {
+            color: #555;
+            flex-grow: 1; /* 让描述部分占据多余空间 */
+            margin-bottom: 20px;
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color-darker);
+            text-align: right;
+            margin-top: auto; /* 将价格推到底部 */
+        }
+        
+        /* --- 响应式设计 --- */
+        @media (max-width: 768px) {
+            #navbar .container {
+                flex-direction: column;
+            }
+            #navbar ul {
+                padding-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            #products-header h1 {
+                font-size: 2.5rem;
+            }
+            #products-header p {
+                font-size: 1.2rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container">
+            <a href="网页文件.html" class="logo-link"> <img src="队徽.jpg" alt="且听烽吟队徽" class="logo-img">
+                <span class="logo-text">且听烽吟实践团</span>
+            </a>
+            <ul>
+                <li><a href="网页文件.html#showcase">首页</a></li>
+                <li><a href="网页文件.html#about">关于我们</a></li>
+                <li><a href="网页文件.html#schedule">实践日程</a></li>
+                <li><a href="网页文件.html#team">队员风采</a></li>
+                <li><a href="网页文件.html#portfolio">成果展示</a></li>
+                <li><a href="网页文件.html#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="products-header">
+        <div class="container">
+            <h1>团队文创产品</h1>
+            <p>"将历史的记忆融入日常，让先辈的精神触手可及"</p>
+        </div>
+    </header>
+
+    <section id="products">
+        <div class="container">
+            <h2>匠心之作</h2>
+            <div class="products-grid">
+                
+                
+                <div class="product-card">
+                    <img src="badge.jpg" alt="纪念帆布袋">
+                    <div class="product-content">
+                        <h3>“且听烽吟”纪念胸章</h3>
+                        <p>印有团队名称“且听烽吟”与抗战主题核心视觉元素。采用厚实耐用的亚克力材质，设计简约大方，有纪念意义。</p>
+                        
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="mascot书签.jpg" alt="主题书签">
+                    <div class="product-content">
+                        <h3>“薪小火”书签</h3>
+                        <p>以且听烽吟实践团吉祥物“薪小火”的形象设计的书签，造型可爱，伴您品味书香。</p>
+                        
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <img src="mascot挂件.jpg" alt="挂件">
+                    <div class="product-content">
+                        <h3>“薪小火”挂件</h3>
+                        <p>以且听烽吟实践团吉祥物“薪小火”的形象设计的书签，造型可爱。</p>
+                        
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="明信片.png" alt="明信片套装">
+                    <div class="product-content">
+                        <h3>红色烽火明信片</h3>
+                        <p>选取红色抗战主题的艺术作品为封面，设计并制作出了一套两张的明信片，背面留有充足空间，供您写下感悟。</p>
+                        
+                    </div>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <footer id="main-footer">
+        <p>Copyright &copy; 2025, 北京科技大学且听烽吟红色寻访实践团. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
