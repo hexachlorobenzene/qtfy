@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>且听烽吟实践小队</title>
+    <style>
+        /* --- 全局样式 --- */
+        :root {
+            --primary-color: #8B4513; /* 马鞍棕色 */
+            --primary-color-darker: #6F360F; /* <<< 新增这一行 */
+            --secondary-color: #D2B48C; /* 谭色 */
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --font-family: 'SimSun', 'FangSong', 'KaiTi', serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: normal;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        /* --- 导航栏 --- */
+        #navbar {
+            background: #fff;
+            color: var(--dark-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #navbar .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        #navbar .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        #navbar .logo-text {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        #navbar ul li a {
+            color: var(--dark-color);
+            padding: 15px 20px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        #navbar ul li a:hover {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* --- 头部展示 --- */
+        #showcase {
+            background: url('封面2.png') no-repeat center center/cover;
+            height: 95vh;
+            color: #fff;
+            display: flex;
+            align-items: center;    /* 垂直居中 */
+            position: relative;
+            padding-left: 0px;   /* 减小左边距，从100px改为50px */
+        }
+        
+        .showcase-content {
+            position: relative;
+            z-index: 1;
+            width: 600px;         /* 固定内容区域宽度 */
+            background: rgba(255, 255, 255, 0);  /* 半透明背景 */
+            padding: 40px;        /* 内边距 */
+            border-radius: 15px;  /* 圆角边框 */
+           
+            text-align: center;   /* 文字居中对齐 */
+        }
+
+        /* 添加新的标题样式 */
+        #showcase h1 {
+            font-size: 96px;
+            margin-bottom: 20px;
+            color: black;
+            text-align: center;   /* 标题居中 */
+        }
+
+        #showcase p {
+            font-family: kaiti;
+            font-size: 44px;
+            color: black;
+            text-align: center;   /* 段落居中 */
+            margin: 10px 0;
+        }
+
+        /* 新增团队名称样式 */
+        .team-name {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: black;  /* 浅棕色 */
+            font-family: 'MS UI Gothic';
+            font-size: 24px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);  /* 添加白色阴影提高可读性 */
+        }
+
+        /* --- 关于我们 (带背景图的版本) --- */
+
+        /* 1. 设置section本身 */
+        #about {
+            padding-top: 120px;
+            padding-bottom: 120px;
+            position: relative; /* 这是为了让遮罩层能基于它定位 */
+            background: url('关于我们.jpg') no-repeat center center; /* 默认使用您自己的照片 */
+            background-size: cover; /* 让背景图始终填满整个区域 */
+            background-attachment: fixed; /* 实现滚动时的视差效果，非常酷！ */
+            color: #fff; /* 将本区域所有文字（包括标题）的默认颜色设为白色 */
+            z-index: 0; /* 确保section在默认层 */
+        }
+
+        /* 2. 创建一个半透明的黑色遮罩层 */
+        #about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.65); /* 半透明黑色。0.6是透明度，可以调整 */
+            z-index: -1; /* 将遮罩层放在背景图之上，但在内容之下 */
+        }
+
+        /* 3. 修改标题和段落的颜色，确保它们在最上层 */
+        #about h2 {
+            color: #000; /* 将标题也改为白色 */
+            border-bottom-color: rgba(255, 255, 255, 0.5); /* 让标题下划线也变浅色 */
+            font-family: 'Microsoft JhengHei UI Light';
+        }
+
+        #about p {
+            color: #000; /* 确保段落文字是白色 */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* 给文字加一点阴影，增强可读性 */
+            font-family: 'Microsoft JhengHei UI Light';
+        }
+
+        /* --- 实践日程 (时间轴) - v2.0 稳定版 --- */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 中央时间线 */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--secondary-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        /* 时间轴上的每个项目容器 */
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box; /* 确保 padding 不会撑大宽度 */
+        }
+
+        /* 奇数项目 (第1, 3, 5个...) - 放在左边 */
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 20px;
+        }
+
+        /* 偶数项目 (第2, 4, 6个...) - 放在右边 */
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 20px;
+        }
+
+        /* 时间轴上的圆点 */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 4px solid var(--primary-color);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* 左侧项目的圆点定位 */
+        .timeline-item:nth-child(odd)::after {
+            right: -12px;
+        }
+
+        /* 右侧项目的圆点定位 */
+        .timeline-item:nth-child(even)::after {
+            left: -12px;
+        }
+
+        /* 项目中的内容块 */
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        /* 内容块的小箭头 */
+        .timeline-content::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            border: medium solid white;
+        }
+
+        /* 左侧内容块的小箭头 */
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -10px;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent white;
+        }
+
+        /* 右侧内容块的小箭头 */
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -10px;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        /* --- 队员风采 --- */
+        #team .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .team-member {
+            background: #fff;
+            text-align: center;
+            padding: 30px 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .team-member img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--secondary-color);
+        }
+
+        .team-member h4 {
+            font-size: 1.5rem;
+            margin: 15px 0 5px 0;
+            color: var(--primary-color);
+        }
+
+        .team-member p.role {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* --- 成果展示 --- */
+        #portfolio .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .portfolio-item {
+            position: relative;
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            min-height: 200px; /* 设置最小高度 */
+            display: flex;           /* 使用 flex 布局 */
+            align-items: center;     /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+            background-color: var(--primary-color-darker);
+        }
+        
+        .portfolio-item a {
+            text-decoration: none;
+            color: #fff;
+            width: 100%;
+            height: 100%;
+            display: flex;          /* 使用 flex 布局 */
+            align-items: center;    /* 垂直居中 */
+            justify-content: center;/* 水平居中 */
+        }
+        
+        .portfolio-overlay {
+            width: 100%;              /* 确保覆盖整个区域 */
+        }
+        
+        .portfolio-overlay h4 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin: 0;
+            padding: 0;
+            width: 100%;             /* 确保文字容器占满宽度 */
+            text-align: center;      /* 确保文字居中 */
+        }
+
+        /* 添加到现有的CSS样式中 */
+        .portfolio-item a {
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .portfolio-item a:hover .portfolio-overlay {
+            opacity: 1;
+        }
+
+        /* --- 联系我们 --- */
+        #contact {
+            background: var(--primary-color);
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        #contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(210, 180, 140, 0.85); /* 谭色半透明遮罩 */
+            z-index: 0;
+        }
+
+        #contact .container {
+            position: relative;
+            z-index: 1;
+        }
+        #contact h2 {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+        #contact p {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        .contact-info {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .contact-info a {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-decoration: none;
+        }
+        /* --- 图片展示样式 --- */
+        .contact-images {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .contact-sections-container {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 30px;
+        }
+
+        .contact-section {
+            text-align: center;
+        }
+
+        .contact-section h4 {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 3px solid #fff;
+        }
+
+        .contact-image:hover {
+            transform: scale(1.05);
+        }
+
+
+        /* --- 图片放大模态框样式 --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+        }
+
+
+        /* --- 页脚 --- */
+        #main-footer {
+            background: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+            /********************************************/
+        /* --- 新增功能：可展开时间轴的专属样式 --- */
+        /********************************************/
+
+        .details-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .details-btn:hover {
+            background-color: var(--primary-color-darker);
+        }
+
+        .sub-timeline {
+            margin-top: 20px;
+            padding-left: 20px;
+            border-left: 2px solid var(--secondary-color);
+            /* 默认隐藏，通过JS添加 'show' 类来显示 */
+            display: none; 
+        }
+
+        .sub-timeline.show {
+            display: block; /* 当有 'show' 类时显示 */
+        }
+
+        .sub-timeline ul {
+            list-style: none;
+            padding-left: 25px;
+            margin: 0;
+        }
+
+        .sub-timeline li {
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .sub-timeline li::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        /* --- 小时间轴内容与标题分离的样式 --- */
+        .sub-timeline-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .sub-timeline-content {
+            color: #555; /* 内容文字颜色稍浅，以作区分 */
+        }
+        
+        /********************************************/
+        /* --- 新增功能：时间轴两侧的照片样式 --- */
+        /********************************************/
+        
+        .timeline-photo {
+            position: absolute; /* 使用绝对定位，脱离文档流 */
+            top: 20px; /* 从顶部20px开始，大致与标题对齐 */
+            width: 370px; /* 固定图片宽度 */
+            height: 216px; /* 固定图片高度 */
+            object-fit: cover; /* 保证图片不变形，裁剪多余部分 */
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0.9;
+            transition: all 0.3s ease;
+            z-index: 0; /* 确保图片在内容框和圆点之下 */
+        }
+        
+        .timeline-photo:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        /* 为左侧内容（奇数项）的图片定位到右边 */
+        .timeline-item:nth-child(odd) .timeline-photo {
+            left: calc(100% + 40px); /* 关键：定位到父容器(50%宽)的100%处再加40px间距 */
+        }
+        
+        
+        /* 为右侧内容（偶数项）的图片定位到左边 */
+        .timeline-item:nth-child(even) .timeline-photo {
+            right: calc(100% + 40px); /* 关键：定位到父容器(50%宽)的100%处再加40px间距 */
+        }
+        .timeline-photo-group {
+            position: absolute;
+            top: 10px;                    /* 从顶部开始定位 */
+            right: calc(17%);     /* 定位到内容块左侧 */
+            width: 370px;                 /* 设置固定宽度 */
+            margin-bottom: 10px;
+            z-index: 0;
+        }
+
+        .timeline-photo-group .timeline-photo {
+            position: relative;          /* 改为相对定位 */
+            display: block;             /* 块级排列 */
+            margin: 0 0 20px 0;        /* 只设置下间距 */
+            width: 370px;
+            height: 216px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        /* 添加在现有的 .timeline-photo-group 样式之后 */
+        .additional-photos {
+            display: none;  /* 默认隐藏 */
+            position: absolute;
+            top: 480px;    /* 调整位置，确保在原有照片组下方 */
+            right: calc(17%);  /* 与原有照片组对齐 */
+            width: 370px;
+            z-index: 0;
+        }
+
+        .additional-photos.show {
+            display: block;
+        }
+
+        /* 确保额外照片组中的照片样式与原有照片一致 */
+        .additional-photos .timeline-photo {
+            position: relative;
+            display: block;
+            margin: 0 0 20px 0;
+            width: 370px;
+            height: 216px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+
+        /* --- 响应式设计 --- */
+        @media (max-width: 768px) {
+            #navbar .container {
+                flex-direction: column;
+            }
+            #navbar ul {
+                padding-top: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            #navbar ul li a {
+                padding: 10px 12px;
+            }
+            #showcase h1 {
+                font-size: 2.5rem;
+            }
+            #showcase p {
+                font-size: 1.2rem;
+            }
+            /* 在手机上，日程表取消两栏布局，变为单栏上下排列 */
+            .schedule-container {
+                grid-template-columns: 1fr;
+            }
+
+            #info-panel {
+                position: static; /* 取消固定定位 */
+                margin-top: 40px;
+            }
+            /* ⬇️⬇️⬇️ 新增这一行 ⬇️⬇️⬇️ */
+            .timeline-photo {
+                display: none;
+            }
+            
+            /* 时间轴的响应式设计 */
+            .timeline::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+
+            .timeline-item::after {
+                left: 21px;
+            }
+
+            .timeline-item .timeline-content::before {
+                left: -10px;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent white transparent transparent;
+            }
+        }
+
+        /* 为第三个时间轴项目添加额外的上边距 */
+        .timeline-item:nth-child(3) {
+            margin-top: 65px;  /* 根据前一个内容块的图片组高度来设置，可以根据需要调整这个值 */
+        }
+
+        /* 嵌套时间轴的样式 */
+        .nested-timeline {
+            display: block;  /* 改为直接显示 */
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 1px dashed var(--secondary-color);
+        }
+
+        .sub-details-btn {
+            font-size: 0.9rem;
+            padding: 5px 12px;
+            margin: 5px 0;
+            background-color: var(--secondary-color);
+        }
+
+        .sub-details-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* 嵌套时间轴的圆点样式 */
+        .nested-timeline li::before {
+            width: 8px;
+            height: 8px;
+            left: -19px;
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container">
+            <a href="#" class="logo-link">
+                <img src="队徽.jpg" alt="且听烽吟队徽" class="logo-img">
+                <span class="logo-text">且听烽吟实践团</span>
+            </a>
+            <ul>
+                <li><a href="#showcase">首页</a></li>
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#schedule">实践日程</a></li>
+                <li><a href="#team">队员风采</a></li>
+                <li><a href="#portfolio">成果展示</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="showcase">
+        <div class="showcase-content">
+            <h1 style="font-family: 'MS UI Gothic';">且听烽吟</h1>
+            <p style="font-family: 'MS UI Gothic';font-size: 40px">"听 风 成 诗&nbsp;&nbsp;&nbsp;&nbsp;我 辈 续 吟"</p><br>
+            <p style="font-family: 'Yu Gothic Light'; color: goldenrod;">
+                <span style="font-size: 20px;">2025</span>
+                <span style="font-size: 30px; margin: 0 0 0 0px; position: relative; top: -30px; right: -30px;">7</span>
+                <img src="斜杠.png" alt="Logo" style="width: 50px; height: 50px; vertical-align: middle; margin-left: -5px;">
+                <span style="font-size: 30px; position: relative; bottom: -30px; right: 30px;">22</span>
+                <span style="font-size: 20px;"> - </span>
+                <span style="font-size: 30px; margin: 0 0 0 0px; position: relative; top: -30px; right: -30px;">8</span>
+                <img src="斜杠.png" alt="Logo" style="width: 50px; height: 50px; vertical-align: middle; margin-left: -5px;">
+                <span style="font-size: 30px; position: relative; bottom: -30px; right: 30px;">05</span>
+            </p>
+        </div>
+        <!-- 新增团队名称 -->
+        <div class="team-name">北京科技大学且听烽吟红色寻访实践团</div>
+    </header>
+
+    <section id="about">
+        <div class="container">
+            <h2>关于我们</h2>
+            <p style="font-size:30px;text-align: center;">八十年前的硝烟早已散尽</p>
+            <p style="font-size:30px;text-align: center;">那段抗争的记忆却从未褪色</p>
+            <p style="font-size:30px;text-align: center;">历史的回响</p>           
+            <p style="font-size:30px;text-align: center;">催生出了一群追光者——且听烽吟实践团</p>
+            <p style="font-size:30px;text-align: center;">在这个裹挟着蝉鸣与热忱的假期</p>    
+            <p style="font-size:30px;text-align: center;">我们，将带着“忆峥嵘，传精神”的初心出发</p>    
+            <p style="font-size:30px;text-align: center;">用脚步丈量先辈们的征程</p>   
+            <p style="font-size:30px;text-align: center;">用镜头捕捉遗址上的每一道时光刻痕</p>   
+            <p style="font-size:30px;text-align: center;">用文字记录访谈里的每一段真情实感</p>   
+            <p style="font-size:30px;text-align: center;">让先辈的勇气与担当</p> 
+            <p style="font-size:30px;text-align: center;">成为当下生活中传递温度的火种</p>   
+            <p style="font-size:30px;text-align: center;">让红色血脉的薪火</p>   
+            <p style="font-size:30px;text-align: center;">在新时代的奋进征程中熊熊燃烧</p>   
+        </div>
+    </section>
+
+    <section id="team">
+            <div class="container">
+                <h2>队员风采</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="何欣妍.jpg" alt="队员照片">
+                        <h4>何欣妍</h4>
+                        <p class="role">队长 / 统筹规划</p>
+                        <p>“纸上得来终觉浅，绝知此事要躬行。”</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="冯馨梦.jpg" alt="队员照片">
+                        <h4>冯馨梦</h4>
+                        <p class="role">副队长 / 影像处理</p>
+                        <p>“用脚步丈量大地，用笔触记录真实。”</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="宋奕涵.jpg" alt="队员照片">
+                        <h4>宋奕涵</h4>
+                        <p class="role">宣传 / 影像记录</p>
+                        <p>“让镜头成为我们的眼睛，讲述无声的故事。”</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="张虹约.jpg" alt="队员照片">
+                        <h4>张虹约</h4>
+                        <p class="role">后勤 / 资料整理</p>
+                        <p>“行稳致远，做好团队最坚实的后盾。”</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="赵恒禾.jpg" alt="队员照片">
+                        <h4>赵恒禾</h4>
+                        <p class="role">财务 / 数据分析</p>
+                        <p>“细节决定成败，数据揭示真相。”</p>
+                    </div>
+
+                    <div class="team-member">
+                        <img src="杨鑫.jpg" alt="队员照片">
+                        <h4>杨鑫</h4>
+                        <p class="role">联络 / 对外协调</p>
+                        <p>“沟通是连接心灵的桥梁。”</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="黄白霖1.jpg" alt="队员照片">
+                        <h4>黄白霖</h4>
+                        <p class="role">财务 / 数据分析</p>
+                        <p>“细节决定成败，数据揭示真相。”</p>
+                    </div>
+
+                    <div class="team-member">
+                        <img src="孙连江.jpg" alt="队员照片">
+                        <h4>孙连江</h4>
+                        <p class="role">联络 / 对外协调 </p>
+                        <p>“沟通是连接心灵的桥梁。”</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="卢家杰.jpg" alt="队员照片">
+                        <h4>卢家杰</h4>
+                        <p class="role">财务 / 数据分析</p>
+                        <p>“细节决定成败，数据揭示真相。”</p>
+                    </div>
+
+                    <div class="team-member">
+                        <img src="刘健.jpg" alt="队员照片">
+                        <h4>刘健</h4>
+                        <p class="role">联络 / 对外协调</p>
+                        <p>“沟通是连接心灵的桥梁。”</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <section id="schedule" style="background-color: #f9f9f9;">
+        <div class="container">
+            <h2>实践日程</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <img src="启程.png" alt="团队启程照片" class="timeline-photo">
+                    <div class="timeline-content">
+                        <h3>第一阶段：准备与启程</h3>
+                        <p><strong>日期：2025年7月15日 - 7月21日</strong><br>完成团队组建，开展线上主题研讨，确定调研方向与方法，准备访谈提纲与调研问卷，整理行装，准备出发。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    
+                    <div class="timeline-photo-group">
+                        <img src="实践1.jpg" alt="团队实践照片" class="timeline-photo">
+                        <img src="实践2.jpg" alt="团队实践照片" class="timeline-photo">
+                    </div>
+    
+                    <div class="timeline-photo-group additional-photos">
+                        <img src="实践3.jpg" alt="团队实践照片" class="timeline-photo">
+                        <img src="实践4.jpg" alt="团队实践照片" class="timeline-photo">
+                        <img src="实践5.jpg" alt="团队实践照片" class="timeline-photo">
+                        <img src="实践6.jpg" alt="团队实践照片" class="timeline-photo">
+                        <img src="实践7.jpg" alt="团队实践照片" class="timeline-photo">  <!-- 新增的第四张照片 -->
+                    </div>
+                    
+                    <div class="timeline-content">
+                        <h3>第二阶段：开展实践</h3>
+                        <p><strong>日期：2025年7月22日 - 8月5日</strong><br>团队先后去往中国人民抗日战争纪念馆、卢沟桥公园、中国人民抗日战争纪念雕塑园、张自忠路、佟麟阁路、赵登禹路、八宝山革命公墓等地深入调研、采访，收集第一手资料，并对三位抗战老兵的后人进行深度访谈，了解那些不为人知的战争往事。同时，我们开展了两场分别针对于小朋友与青年人的抗战精神宣讲，反响很好。</p>
+                        
+                        <button class="details-btn">点击即可查看详细日程</button>
+                        <div class="sub-timeline">
+                            <ul>
+                                <li>
+                                    <div class="sub-timeline-title">7月22日</div>
+                                    <div class="sub-timeline-content"><a href="https://mp.weixin.qq.com/s/J553wk_yt-0qVjlLc696vg" title="点击这里，看看在这里我们都看到了什么" target="_blank" rel="noopener noreferrer">参观中国人民抗日战争纪念馆</a></div>
+                                </li>
+                                <li>
+                                    <div class="sub-timeline-title">7月23日</div>
+                                    <div class="sub-timeline-content"><a href="https://mp.weixin.qq.com/s/44YbRpUiS2oySkFf0QDInw" title="点击这里，看看在这里我们都看到了什么" target="_blank" rel="noopener noreferrer">参观卢沟桥公园与中国人民抗日战争纪念馆</a></div>
+                                </li>
+                                <li>
+                                    <div class="sub-timeline-title">7月24日</div>
+                                    <div class="sub-timeline-content"><a href="https://mp.weixin.qq.com/s/JDTdRyBlR65QM32K0x8XxQ" title="点击这里，看看我们说了什么" target="_blank" rel="noopener noreferrer">赴中关村街道华清园社区开展“抗战故事两则”抗战精神主题宣讲。</a></div>
+                                
+                                </li>
+                                <li>
+                                    <div class="sub-timeline-title">7月25日</div>
+                                    <div class="sub-timeline-content"><a href="https://mp.weixin.qq.com/s/XzBFt5FI61p8aGYQ8sPVIg" title="点击这里，看看在这里我们都看到了什么" target="_blank" rel="noopener noreferrer">参观北大红楼。</a></div>
+                                </li>
+                                <li>
+                                    <div class="sub-timeline-title">7月30日</div>
+                                    <div class="sub-timeline-content">
+                                        <div class="nested-timeline">
+                                            <ul>
+                                                <li>
+                                                    <div class="sub-timeline-title">上午9:00</div>
+                                                    <div class="sub-timeline-content">探访<a href="https://mp.weixin.qq.com/s/y_Sg5Kr2a3jm5NQfywadxQ" title="点击这里，看看在这里我们都看到了什么" target="_blank" rel="noopener noreferrer">赵登禹路</a>，寻访赵登禹将军的抗战事迹</div>
+                                                </li>
+                                                <li>
+                                                    <div class="sub-timeline-title">下午 14:00</div>
+                                                    <div class="sub-timeline-content">探访<a href="https://mp.weixin.qq.com/s/hJx8R79BT0ng-K8i_Uun3A" title="点击这里，看看在这里我们都看到了什么" target="_blank" rel="noopener noreferrer">佟麟阁路</a>，了解佟麟阁将军的英勇事迹</div>
+                                                </li>
+                                                <li>
+                                                    <div class="sub-timeline-title">下午 16:30</div>
+                                                    <div class="sub-timeline-content">探访<a href="https://mp.weixin.qq.com/s/IILAGgbz3VnlhYTFxMERfA" title="点击这里，看看在这里我们都看到了什么" target="_blank" rel="noopener noreferrer">张自忠路</a>，缅怀张自忠将军的牺牲精神</div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sub-timeline-title">7月31日</div>
+                                    <div class="sub-timeline-content"><a href="https://mp.weixin.qq.com/s/LjdpRiMXVOs-gIVyiKuptQ" title="点击这里，看看我们有什么感想" target="_blank" rel="noopener noreferrer">赴八宝山革命公墓，瞻仰革命先辈。</a></div>
+                                </li>
+                                <li>
+                                    <div class="sub-timeline-title">8月1日</div>
+                                    <div class="sub-timeline-content">
+                                        <div class="nested-timeline">
+                                            <ul>
+                                                <li>
+                                                    <div class="sub-timeline-title">上午 9:00</div>
+                                                    <div class="sub-timeline-content">访谈原北京钢铁学院总务长王慕林之子蒋玉琨先生</div>
+                                                </li>
+                                                <li>
+                                                    <div class="sub-timeline-title">上午 11:00</div>
+                                                    <div class="sub-timeline-content">访谈原北京钢铁学院纪委书记林楠之子张洪成先生</div>
+                                                </li>
+                                                <li>
+                                                    <div class="sub-timeline-title">下午 14:30</div>
+                                                    <div class="sub-timeline-content"><a href="http://mp.weixin.qq.com/s?__biz=MzE5MTkzMTE4Mw==&mid=2247484692&idx=1&sn=922027abfa04693a604748de8dbaf4ea&chksm=97b498167105a0f6d1ea03ee4c117781308be38cf01b7be65a2ca66ae970df0818e9c7a6fab0&scene=126&sessionid=1756093990&subscene=7&clicktime=1756094320&enterid=1756094320#rd" title="点击这里，看看在这里我们都说了什么" target="_blank" rel="noopener noreferrer">赴中关村街道华清园社区开展"水袖藏烽，越剧中的烽火"抗战精神主题宣讲</a></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sub-timeline-title">8月4日</div>
+                                    <div class="sub-timeline-content">访谈原铁道兵第十一师师长陈德三之婿孙铁教授</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                        
+                </div>
+                <div class="timeline-item">
+                    <img src="访谈.jpg" alt="团队讨论照片" class="timeline-photo">
+                    <div class="timeline-content">
+                        <h3>第三阶段：资料整理</h3>
+                        <p><strong>日期：2025年8月6日 - 8月15日</strong><br>对收集到的访谈录音、影像资料、问卷数据进行归档与初步分析。每晚召开团队例会，分享当日发现，讨论遇到的问题。</p>
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <img src="4.jpg" alt="团队讨论照片" class="timeline-photo">
+                    <div class="timeline-content">
+                        <h3>第四阶段：成果凝练</h3>
+                        <p><strong>日期：2025年8月16日 - 8月31日</strong><br>撰写实践调研报告，制作影像成果（纪录片/摄影集），总结团队实践经验与反思，准备最终的成果汇报。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <section id="portfolio" style="background-color: #f9f9f9;">
+        <div class="container">
+            <h2>成果展示</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay"><h4>实践调研报告</h4></div>
+                </div>
+                <div class="portfolio-item" onclick="window.location.href='人物专访集页面.html'" style="cursor: pointer;">
+                    <div class="portfolio-overlay"><h4>人物专访集</h4></div>
+                </div>
+                <div class="portfolio-item" onclick="window.location.href='抗战故事.html'" style="cursor: pointer;">
+                    <div class="portfolio-overlay"><h4>抗战故事</h4></div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay" onclick="window.location.href='纪录短片.html'" style="cursor: pointer;"><h4>纪录短片</h4></div>
+                </div>
+                <div class="portfolio-item" onclick="window.location.href='文创页面.html'" style="cursor: pointer;">
+                    <div class="portfolio-overlay"><h4>文创产品</h4></div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay"><h4>更多…</h4></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <section id="contact">
+        <div class="container">
+            <h2>联系我们</h2>
+            <p>如果您对我们的实践项目感兴趣，欢迎通过以下方式联系我们。</p>
+            <div class="contact-info">
+                <p>电子邮箱: <a href="mailto:lelede@email.com">qietingfengyin@email.com</a></p>
+            </div>
+            <div class="contact-images">
+                <div class="contact-sections-container">
+                    <div class="contact-section">
+                        <h4>微信公众号</h4>
+                        <img src="微信公众号.jpg" alt="微信公众号二维码" class="contact-image" onclick="openModal(this.src)">
+                    </div>
+                    <div class="contact-section">
+                        <h4>社交媒体</h4>
+                        <img src="二维码.png" alt="社交媒体二维码" class="contact-image" onclick="openModal(this.src)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 图片放大模态框 -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image" src="" alt="放大图片">
+        </div>
+    </div>
+
+    <footer id="main-footer">
+        <p>Copyright &copy; 2025, 北京科技大学且听烽吟红色寻访实践团. All Rights Reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const detailsButton = document.querySelector('.details-btn');
+    if (detailsButton) {
+        const subTimeline = detailsButton.nextElementSibling;
+        const additionalPhotos = detailsButton.closest('.timeline-item')
+            .querySelector('.additional-photos');
+        
+        detailsButton.addEventListener('click', function() {
+            // 切换详细日程的显示
+            subTimeline.classList.toggle('show');
+            // 切换额外照片的显示
+            additionalPhotos.classList.toggle('show');
+            // 更新按钮文字
+            this.textContent = subTimeline.classList.contains('show') 
+                ? '收起详细信息' 
+                : '点击即可查看详细日程';
+        });
+    }
+});
+    // --- 功能3：图片放大模态框 ---
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageSrc;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 防止背景滚动
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        }
+
+        // 点击模态框背景关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
